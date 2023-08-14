@@ -21,8 +21,18 @@ table <- webpage %>%
 
 # Bekijk de eerste paar rijen van de tabel
 table
+```
+
+```{r}
+# Verwijder '$' en ',' tekens en converteer naar numeriek
+table$Worldwide <- as.numeric(gsub(",", "", gsub("\\$", "", table$Worldwide)))
+table$Domestic <- as.numeric(gsub(",", "", gsub("\\$", "", table$Domestic)))
+table$Foreign <- as.numeric(gsub(",", "", gsub("\\$", "", table$Foreign)))
+
+
+# Bekijk de eerste paar rijen van de tabel
+table
 
 write.csv(table, "box_office_data.csv", row.names = FALSE)
 ```
-
 
