@@ -36,3 +36,20 @@ table
 write.csv(table, "box_office_data.csv", row.names = FALSE)
 ```
 
+
+```{r}
+# Selecteer de gewenste kolommen en de eerste 10 rijen
+table_filtered <- table[, c("Release Group", "Worldwide", "Domestic", "Foreign")][1:10, ]
+
+# Wijzig kolomnamen
+colnames(table_filtered)[colnames(table_filtered) == "Release Group"] <- "Film"
+colnames(table_filtered)[colnames(table_filtered) == "Worldwide"] <- "Opbrengste"
+colnames(table_filtered)[colnames(table_filtered) == "Domestic"] <- "Amerikaanse Markt"
+colnames(table_filtered)[colnames(table_filtered) == "Foreign"] <- "Andere Markt"
+
+# Bekijk de eerste paar rijen van de tabel
+table_filtered
+
+write.csv(table_filtered, "box_office_data_filtered.csv", row.names = FALSE)
+```
+
