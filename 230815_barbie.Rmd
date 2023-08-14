@@ -1,0 +1,28 @@
+---
+title: "230814_barbie"
+author: "Robbe Van Molle"
+date: "2023-08-14"
+output: html_document
+---
+
+```{r}
+library(rvest)
+
+# De URL van de website die je wilt scrapen
+url <- "https://www.boxofficemojo.com/year/world/?sort=worldwideGrossToDate&ref_=bo_ydw__resort#table"
+
+# Lees de webpagina in
+webpage <- read_html(url)
+
+# Gebruik css selectors om de juiste tabel te selecteren en haal deze op
+table <- webpage %>%
+  html_node("table.a-bordered.a-horizontal-stripes.a-size-base.a-span12.mojo-body-table.mojo-table-annotated") %>%
+  html_table()
+
+# Bekijk de eerste paar rijen van de tabel
+table
+
+write.csv(table, "box_office_data.csv", row.names = FALSE)
+```
+
+
