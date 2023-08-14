@@ -53,3 +53,48 @@ table_filtered
 write.csv(table_filtered, "box_office_data_filtered.csv", row.names = FALSE)
 ```
 
+```{r}
+# De URL van de website die je wilt scrapen
+url_100 <- "https://www.boxofficemojo.com/chart/ww_top_lifetime_gross/?area=XWW#"
+
+# Lees de webpagina in
+webpage_100 <- read_html(url_100)
+
+# Gebruik css selectors om de juiste tabel te selecteren en haal deze op
+table_100 <- webpage_100 %>%
+  html_node("table.a-bordered.a-horizontal-stripes.a-size-base.a-span12.mojo-body-table.mojo-table-annotated") %>%
+  html_table()
+
+# Bekijk de eerste paar rijen van de tabel
+table_100
+
+# Wijzig kolomnamen
+colnames(table_100)[colnames(table_100) == "Title"] <- "Film"
+colnames(table_100)[colnames(table_100) == "Worldwide Lifetime Gross"] <- "Opbrengste"
+colnames(table_100)[colnames(table_100) == "Year"] <- "Jaar"
+
+# Verwijder '$' en ',' tekens en converteer naar numeriek
+table_100$Opbrengste <- as.numeric(gsub(",", "", gsub("\\$", "", table_100$Opbrengste)))
+
+
+# Selecteer de gewenste kolommen en de eerste 10 rijen
+table_100_filtered <- table_100[, c("Film", "Opbrengste", "Jaar")][1:100, ]
+
+# Zorg ervoor dat dplyr geladen is
+library(dplyr)
+
+# Voeg de kolom voor de regisseur toe
+table_100_filtered <- table_100_filtered %>%
+  mutate(Regisseur = case_when(
+    Film %in% c("Wonder Woman", "Barbie") ~ "Vrouwelijke regisseur",
+    Film %in% c("Frozen II", "Frozen", "Captain Marvel") ~ "Vrouwelijke co-regisseur",
+    TRUE ~ "Mannelijke regisseur"
+  ))
+
+# Bekijk de eerste paar rijen van de tabel
+table_100_filtered
+
+# Exporteer naar CSV
+write.csv(table_100_filtered, "best_box_office_data_100.csv", row.names = FALSE)
+```
+
